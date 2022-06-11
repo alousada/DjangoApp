@@ -43,11 +43,100 @@
     <div class="container-fluid">
             <h2>{{ course.name }}</h2>
             <div class="card-columns-vertical">
+
+<!-- Starting the loop for selected questions on course -->
+            
                 {% for lesson in course.lesson_set.all %}
                     <div class="card mt-1">
+
                         <div class="card-header"><h5>Lesson {{lesson.order|add:1}}: {{lesson.title}}</h5></div>
                         <div class="card-body">{{lesson.content}}</div>
                     </div>
+
+                    <button class="btn btn-primary" 
+                                type="button" 
+                                data-toggle="collapse" 
+                                data-target="#collapseExample" 
+                                aria-expanded="false" 
+                                aria-controls="collapseExample">
+                                Start Exam
+                     </button>
+
+                    <!-- User authetication -->    
+                    {% if user.is_authenticated %}
+                        <div class="collapse" id="collapseExample">
+                        <div class="card card-body">
+
+                        <form id="questionform" 
+                              action="{% url 'onlinecourse:submission' course.id %}" 
+                              method="post">
+
+                        <!-- Loop over lesson questions started-->                
+                        {% for question in lesson.question_set.all %}
+                        <div class="card mt-1">
+                            <div class="card-header"><h5>{{ question.question_text}}</h5></div>
+                            {% csrf_token %}
+                            <div class="form-group">
+                                
+                            <!-- Loop over question choices -->   
+                               {% for choice in question.choice_set.all %}
+                                <div class="form-check">
+                                    <label class="form-check-label">
+                                        <input type="checkbox" 
+                                               name="choice_{{choice.id}}"
+                                               class="form-check-input" 
+                                               id="{{choice.id}}"
+                                               value="{{choice.id}}">
+                                        {{ choice.choice_text }}
+                                    </label>
+                                </div>
+
+                                <!-- Loop over question choices ended -->  
+                                {% endfor %}
+
+                                </div>
+                        </div>
+                        <!-- Loop over lesson questions ended -->  
+                        {% endfor %}
+                            
+                        <input class="btn btn-success btn-block" 
+                               type="submit" 
+                               value="Submit">
+                        </form> 
+                        
+                    </div>
+                    </div>   
+                    
+                    <!-- The user must login | register first-->             
+                    {% else %}    
+                    
+                        <li>
+                            <form class="form-inline" action="{% url 'onlinecourse:login' %}" method="post">
+                                {% csrf_token %}
+                                <div class="input-group">
+                                    
+                                    <input type="text" 
+                                           class="form-control" 
+                                           placeholder="Username" 
+                                           name="username" >
+                                    
+                                    <input type="password" 
+                                           class="form-control" 
+                                           placeholder="Password" 
+                                           name="psw" >
+                                    <button class="btn btn-primary" type="submit">Login</button>
+                                    <a class="btn btn-link" 
+                                       href="{% url 'onlinecourse:registration' %}">Sign Up</a>
+                                </div>
+                            </form>
+                        </li>
+                        
+                        
+                        
+                    {% endif %} 
+                    </div>
+
+<!-- Ending the main loop -->
                 {% endfor %}
             </div>
             <!-- Task: show questions and choices -->
