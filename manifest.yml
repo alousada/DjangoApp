@@ -1,11 +1,11 @@
   applications:
   - name: onlinecourse
     routes:
-      - route: djangoapp.us-south.cf.appdomain.cloud 
+      - route: FinalApp.us-south.cf.appdomain.cloud 
     memory: 128M
     buildpack: python_buildpack
   - name: onlinecourse-nginx
     routes:
-      - route: djangoapp.us-south.cf.appdomain.cloud 
+      - route: FinalApp.us-south.cf.appdomain.cloud 
     memory: 128M
     buildpack: staticfile_buildpack
