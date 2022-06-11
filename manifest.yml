@@ -1,11 +1,11 @@
   applications:
   - name: onlinecourse
     routes:
-      - route: djangoapp.apic.mybluemix.ne
+      - route: djangoapp.mybluemix.net
     memory: 128M
     buildpack: python_buildpack
   - name: onlinecourse-nginx
     routes:
-      - route: djangoapp.apic.mybluemix.ne
+      - route: djangoapp.mybluemix.net
     memory: 128M
     buildpack: staticfile_buildpack
